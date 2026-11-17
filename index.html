@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerador de Senhas Seguras</title>
+<style>
+:root {
+--cor-fundo: #01080E;
+--cor-card: #0B132B;
+--cor-borda: #1C2541;
+--cor-destaque: #00F5D4;
+--cor-texto: #FFFFFF;
+--cor-subtexto: #A0AEC0;
+--cor-fraca: #EF4444;
+--cor-media: #F59E0B;
+--cor-forte: #10B981;
+}
+
+* {
+box-sizing: border-box;
+}
+
+body {
+background-color: var(--cor-fundo);
+color: var(--cor-texto);
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+margin: 0;
+padding: 20px;
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+}
+
+.container {
+background-color: var(--cor-card);
+border: 1px solid var(--cor-borda);
+border-radius: 16px;
+padding: 30px;
+width: 100%;
+max-width: 520px;
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+header {
+text-align: center;
+margin-bottom: 25px;
+}
+
+h1 {
+color: var(--cor-destaque);
+font-size: 24px;
+margin: 0 0 8px 0;
+}
+
+header p {
+color: var(--cor-subtexto);
+font-size: 14px;
+margin: 0;
+}
+
+.caixa-senha {
+display: flex;
+gap: 10px;
+margin-bottom: 20px;
+}
+
+#campo-senha {
+flex: 1;
+background-color: var(--cor-fundo);
+border: 1px solid var(--cor-borda);
+border-radius: 8px;
+color: var(--cor-destaque);
+font-family: monospace;
+font-size: 20px;
+padding: 14px;
+text-align: center;
+letter-spacing: 2px;
+}
+
+.btn-copiar {
+background-color: var(--cor-borda);
+color: var(--cor-texto);
+border: none;
+border-radius: 8px;
+padding: 0 18px;
+font-weight: bold;
+cursor: pointer;
+transition: background-color 0.2s;
+}
+
+.btn-copiar:hover {
+background-color: #2B3A67;
+}
+
+.parametros {
+background-color: var(--cor-fundo);
+border: 1px solid var(--cor-borda);
+border-radius: 12px;
+padding: 20px;
+margin-bottom: 20px;
+}
+
+.controle-tamanho {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 18px;
+padding-bottom: 15px;
+border-bottom: 1px solid var(--cor-borda);
+}
+
+.botoes-tamanho {
+display: flex;
+align-items: center;
+gap: 15px;
+}
+
+.btn-ajuste {
+background-color: var(--cor-borda);
+color: var(--cor-destaque);
+border: none;
+width: 34px;
+height: 34px;
+border-radius: 8px;
+font-size: 20px;
+font-weight: bold;
+cursor: pointer;
+}
+
+.btn-ajuste:hover {
+background-color: var(--cor-destaque);
+color: var(--cor-fundo);
+}
+
+#valor-tamanho {
+font-size: 18px;
+font-weight: bold;
+min-width: 24px;
+text-align: center;
+}
+
+.opcoes-caracteres {
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+
+.opcao {
+display: flex;
+align-items: center;
+gap: 10px;
+cursor: pointer;
+font-size: 15px;
+}
+
+.opcao input[type="checkbox"] {
+width: 18px;
+height: 18px;
+accent-color: var(--cor-destaque);
+cursor: pointer;
+}
+
+.secao-forca {
+margin-bottom: 20px;
+}
+
+.forca-cabecalho {
+display: flex;
+justify-content: space-between;
+font-size: 14px;
+margin-bottom: 8px;
+}
+
+.barra-fundo {
+width: 100%;
+height: 10px;
+background-color: var(--cor-fundo);
+border-radius: 5px;
+overflow: hidden;
+}
+
+.barra-progresso {
+height: 100%;
+width: 33%;
+background-color: var(--cor-fraca);
+transition: width 0.3s, background-color 0.3s;
+}
+
+.matematica-info {
+background-color: rgba(0, 245, 212, 0.06);
+border-left: 3px solid var(--cor-destaque);
+padding: 12px;
+border-radius: 6px;
+font-size: 13px;
+color: var(--cor-subtexto);
+line-height: 1.5;
+}
+
+.matematica-info strong {
+color: var(--cor-texto);
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<header>
+<h1>Gerador de Senhas Seguras</h1>
+<p>Gere senhas aleatórias e analise sua segurança matemática</p>
+</header>
+
+<div class="caixa-senha">
+<input type="text" id="campo-senha" readonly>
+<button class="btn-copiar" onclick="copiarSenha()">Copiar</button>
+</div>
+
+<div class="parametros">
+<div class="controle-tamanho">
+<span>Número de caracteres:</span>
+<div class="botoes-tamanho">
+<button class="btn-ajuste" onclick="alterarTamanho(-1)">-</button>
+<span id="valor-tamanho">12</span>
+<button class="btn-ajuste" onclick="alterarTamanho(1)">+</button>
+</div>
+</div>
+
+<div class="opcoes-caracteres">
+<label class="opcao">
+<input type="checkbox" id="maiusculas" checked onchange="geraSenha()">
+Letras maiúsculas (A-Z)
+</label>
+<label class="opcao">
+<input type="checkbox" id="minusculas" checked onchange="geraSenha()">
+Letras minúsculas (a-z)
+</label>
+<label class="opcao">
+<input type="checkbox" id="numeros" checked onchange="geraSenha()">
+Números (0-9)
+</label>
+<label class="opcao">
+<input type="checkbox" id="simbolos" onchange="geraSenha()">
+Símbolos (!@#$%&*)
+</label>
+</div>
+</div>
+
+<div class="secao-forca">
+<div class="forca-cabecalho">
+<span>Força da senha:</span>
+<strong id="texto-forca">Forte</strong>
+</div>
+<div class="barra-fundo">
+<div class="barra-progresso" id="barra-forca"></div>
+</div>
+</div>
+
+<div class="matematica-info" id="info-matematica">
+Calculando entropia...
+</div>
+</div>
+
+<script>
+const letrasMaiusculas = 'ABCDEFGHIJKLMNOPQRSTUVXYWZ';
+const letrasMinusculas = 'abcdefghijklmnopqrstuvxywz';
+const numeros = '0123456789';
+const simbolos = '!@%*?#$&';
+
+let tamanhoSenha = 12;
+
+function alterarTamanho(delta) {
+if (tamanhoSenha + delta >= 4 && tamanhoSenha + delta <= 24) {
+tamanhoSenha += delta;
+document.getElementById('valor-tamanho').textContent = tamanhoSenha;
+geraSenha();
+}
+}
+
+function geraSenha() {
+let alfabeto = '';
+if (document.getElementById('maiusculas').checked) alfabeto += letrasMaiusculas;
+if (document.getElementById('minusculas').checked) alfabeto += letrasMinusculas;
+if (document.getElementById('numeros').checked) alfabeto += numeros;
+if (document.getElementById('simbolos').checked) alfabeto += simbolos;
+
+if (alfabeto === '') {
+document.getElementById('minusculas').checked = true;
+alfabeto = letrasMinusculas;
+}
+
+let senha = '';
+for (let i = 0; i < tamanhoSenha; i++) {
+let numeroAleatorio = Math.floor(Math.random() * alfabeto.length);
+senha += alfabeto[numeroAleatorio];
+}
+
+document.getElementById('campo-senha').value = senha;
+classificaSenha(alfabeto.length);
+}
+
+function classificaSenha(tamanhoAlfabeto) {
+// Cálculo matemático de entropia: E = L * log2(N)
+const entropia = tamanhoSenha * Math.log2(tamanhoAlfabeto);
+const barra = document.getElementById('barra-forca');
+const textoForca = document.getElementById('texto-forca');
+const infoMat = document.getElementById('info-matematica');
+
+// Total de combinações possíveis: N^L
+const combinacoes = Math.pow(tamanhoAlfabeto, tamanhoSenha);
+const combinacoesFormatadas = combinacoes > 1e12
+? combinacoes.toExponential(2).replace('+', '')
+: Math.round(combinacoes).toLocaleString('pt-BR');
+
+if (entropia > 57) {
+barra.style.width = '100%';
+barra.style.backgroundColor = 'var(--cor-forte)';
+textoForca.textContent = 'Forte';
+textoForca.style.color = 'var(--cor-forte)';
+} else if (entropia > 35) {
+barra.style.width = '66%';
+barra.style.backgroundColor = 'var(--cor-media)';
+textoForca.textContent = 'Média';
